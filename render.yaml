@@ -1,0 +1,75 @@
+services:
+  # Frontend (Next.js)
+  - type: web
+    name: zurdir-frontend
+    env: node
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: zurdir-backend
+          property: host
+      - key: NEXT_PUBLIC_SENTRY_DSN
+        sync: false
+      - key: SENTRY_AUTH_TOKEN
+        sync: false
+
+  # Backend (Express)
+  - type: web
+    name: zurdir-backend
+    env: node
+    plan: starter
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: zurdir-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_PASSCODE
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+      - key: OLLAMA_BASE_URL
+        value: https://ollama.cosmictools.us
+      - key: ENCRYPTION_KEY
+        generateValue: true
+
+  # Background Jobs
+  - type: worker
+    name: zurdir-worker
+    env: node
+    plan: starter
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && node src/workers/backup.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: zurdir-db
+          property: connectionString
+      - key: ENCRYPTION_KEY
+        fromService:
+          type: web
+          name: zurdir-backend
+          envVarKey: ENCRYPTION_KEY
+
+databases:
+  - name: zurdir-db
+    databaseName: zurdir
+    user: zurdir_user
+    plan: starter

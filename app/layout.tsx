@@ -4,6 +4,7 @@ import { Inter, Space_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/components/ui/sonner';
 import { StarfieldBackground } from '@/components/starfield-background';
+import * as Sentry from '@sentry/nextjs';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -16,10 +17,15 @@ const spaceMono = Space_Mono({
   variable: '--font-space-mono'
 });
 
-export const metadata: Metadata = {
-  title: 'ZURDIR - Space AI Platform',
-  description: 'A space-themed AI platform with Doctor Who aesthetics',
-};
+export function generateMetadata(): Metadata {
+  return {
+    title: 'ZURDIR',
+    description: 'An AI platform',
+    other: {
+      ...Sentry.getTraceData()  // Adds Sentry performance tracing
+    }
+  };
+}
 
 export default function RootLayout({
   children,

@@ -9,6 +9,7 @@ import { Sidebar } from '@/components/sidebar';
 import { AdminPanel } from '@/components/admin-panel';
 import { FileManager } from '@/components/file-manager';
 import { WebSearch } from '@/components/web-search';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 type View = 'chat' | 'admin' | 'files' | 'search';
 
@@ -68,18 +69,20 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen flex">
-      <Sidebar 
-        currentView={currentView}
-        onViewChange={setCurrentView}
-        onSessionSelect={setSelectedSessionId}
-      />
-      <div className="flex-1 flex flex-col">
-        <DashboardHeader user={user} />
-        <main className="flex-1 overflow-hidden">
-          {renderContent()}
-        </main>
+    <ErrorBoundary>
+      <div className="min-h-screen flex">
+        <Sidebar 
+          currentView={currentView}
+          onViewChange={setCurrentView}
+          onSessionSelect={setSelectedSessionId}
+        />
+        <div className="flex-1 flex flex-col">
+          <DashboardHeader user={user} />
+          <main className="flex-1 overflow-hidden">
+            {renderContent()}
+          </main>
+        </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 }

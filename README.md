@@ -369,3 +369,53 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Built with ❤️ and ⚡ by the ZURDIR Team**
 
 *"Time isn't a straight line. It's all... wibbly wobbly... timey wimey... stuff."* - The Doctor
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Database Configuration
+DATABASE_URL=postgresql://username:password@localhost:5432/zurdir
+
+# JWT Configuration
+JWT_SECRET=0239578650287437630983467 # Make sure to generate a secure key for production use
+JWT_EXPIRES_IN="24h"  # 24 hours or "30d" for "Stay Logged In"
+
+
+# Admin Configuration
+ADMIN_PASSCODE=123456
+
+# Sentry Configuration (Optional)
+SENTRY_DSN=
+SENTRY_AUTH_TOKEN=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
+NEXT_PUBLIC_SENTRY_DSN=
+
+# Ollama Configuration
+OLLAMA_BASE_URL=https://ollama.cosmictools.us
+OLLAMA_CUSTOM_URL=
+
+# Encryption Key for Backups
+ENCRYPTION_KEY=your-32-character-encryption-key-here
+
+# API Configuration
+NEXT_PUBLIC_API_URL=http://localhost:3001
+
+# Server Configuration
+PORT=3001
+NODE_ENV=development
+
+# File Upload Configuration
+MAX_FILE_SIZE=100000000
+ALLOWED_FILE_TYPES=*
+
+# Web Search Configuration
+ENABLE_WEB_SEARCH=true
+BLOCKED_DOMAINS=

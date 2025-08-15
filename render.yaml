@@ -23,6 +23,8 @@ services:
         value: darkmdcode
       - key: SENTRY_PROJECT
         value: zurdir
+      - key: NEXT_PUBLIC_SENTRY_HIDE_SOURCEMAPS
+        value: true
 
   - type: web
     name: zurdir-backend

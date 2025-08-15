@@ -31,6 +31,11 @@ const sentryWebpackPluginOptions = {
   }
 };
 
-module.exports = process.env.SENTRY_DSN 
+/**
+ * Sentry integration is conditionally disabled if DISABLE_SENTRY env variable is set.
+ * To re-enable Sentry, unset DISABLE_SENTRY and ensure SENTRY_DSN is set.
+ */
+const DISABLE_SENTRY = process.env.DISABLE_SENTRY === 'true' || process.env.DISABLE_SENTRY === '1';
+module.exports = (!DISABLE_SENTRY && process.env.SENTRY_DSN)
   ? require("@sentry/nextjs").withSentryConfig(nextConfig, sentryWebpackPluginOptions)
   : nextConfig;

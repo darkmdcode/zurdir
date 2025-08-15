@@ -4,17 +4,23 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 // sentry.edge.config.ts
-import * as Sentry from '@sentry/nextjs';
-import { BrowserTracing } from '@sentry/tracing';
 
-Sentry.init({
+/**
+ * Sentry is disabled if DISABLE_SENTRY env variable is set.
+ * To re-enable, unset DISABLE_SENTRY and restore original imports.
+ */
+const DISABLE_SENTRY_EDGE = process.env.DISABLE_SENTRY === 'true' || process.env.DISABLE_SENTRY === '1';
+const SentryEdge = DISABLE_SENTRY_EDGE ? require('./sentry.noop') : require('@sentry/nextjs');
+const BrowserTracingEdge = DISABLE_SENTRY_EDGE ? undefined : require('@sentry/tracing').BrowserTracing;
+
+SentryEdge.init({
   dsn: process.env.SENTRY_DSN,
   tracesSampleRate: 1.0,
   debug: false,
   integrations: [
-    new BrowserTracing()
-  ],
-  // For logging, useee this instead:
+    BrowserTracingEdge ? new BrowserTracingEdge() : undefined
+  ].filter(Boolean),
+  // For logging, use this instead:
   _experiments: {
     captureConsole: true // Optional: captures console logs
   }

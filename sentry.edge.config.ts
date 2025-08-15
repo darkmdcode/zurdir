@@ -5,15 +5,16 @@
 
 // sentry.edge.config.ts
 import * as Sentry from '@sentry/nextjs';
+import { BrowserTracing } from '@sentry/tracing';
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   tracesSampleRate: 1.0,
   debug: false,
   integrations: [
-    new Sentry.Integrations.Http({ tracing: true })
+    new BrowserTracing()
   ],
-  // For logging, use this instead:
+  // For logging, useee this instead:
   _experiments: {
     captureConsole: true // Optional: captures console logs
   }

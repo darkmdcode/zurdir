@@ -4,7 +4,6 @@ import { Inter, Space_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/components/ui/sonner';
 import { StarfieldBackground } from '@/components/starfield-background';
-import * as Sentry from '@sentry/nextjs';
 
 const inter = Inter({ 
   subsets: ['latin'],

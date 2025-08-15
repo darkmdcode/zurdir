@@ -1,12 +1,11 @@
 // scripts/validate-env.js
+require('dotenv').config();
 const requiredVars = [
   'DATABASE_URL',
   'JWT_SECRET',
   'ADMIN_PASSCODE',
   'ENCRYPTION_KEY',
   'NEXT_PUBLIC_API_URL',
-  'SENTRY_DSN',
-  'SENTRY_AUTH_TOKEN',
 ];
 
 const missing = requiredVars.filter((v) => !process.env[v]);

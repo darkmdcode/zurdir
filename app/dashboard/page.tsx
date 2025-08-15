@@ -1,4 +1,6 @@
+
 'use client';
+export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -29,7 +31,6 @@ export default function Dashboard() {
         setIsLoading(false);
       }
     };
-
     verifyAuth();
   }, [checkAuth, router]);
 

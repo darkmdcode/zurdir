@@ -13,8 +13,15 @@ const nextConfig = {
   },
   experimental: {
     instrumentationHook: true, // Let env vars control activation
-    optimizePackageImports: ['@sentry/nextjs'] // Add this
-  }
+    optimizePackageImports: ['@sentry/nextjs'],
+    missingSuspenseWithCSRBailout: true // Critical for Render/Next.js 14
+  },
+  // Render/production optimizations
+  productionBrowserSourceMaps: false,
+  reactStrictMode: true,
+  swcMinify: true,
+  optimizeFonts: true,
+  optimizeImages: true
 };
 
 const sentryWebpackPluginOptions = {

@@ -11,9 +11,13 @@
 const DISABLE_SENTRY_SERVER = process.env.DISABLE_SENTRY === 'true' || process.env.DISABLE_SENTRY === '1';
 const SentryServer = DISABLE_SENTRY_SERVER ? require('./sentry.noop') : require('@sentry/nextjs');
 
+
 SentryServer.init({
   dsn: process.env.SENTRY_DSN,
   tracesSampleRate: 1,
   enableLogs: true,
   debug: false,
 });
+
+// Ensure this file is treated as a module for dynamic import compatibility
+export {};

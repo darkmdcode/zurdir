@@ -25,3 +25,6 @@ SentryEdge.init({
     captureConsole: true // Optional: captures console logs
   }
 });
+
+// Ensure this file is treated as a module for dynamic import compatibility
+export {};

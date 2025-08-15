@@ -10,3 +10,6 @@ const SentryClient = DISABLE_SENTRY_CLIENT ? require('./sentry.noop') : require(
 SentryClient.init({
   // Add custom client-side Sentry options here if needed
 });
+
+// Ensure this file is treated as a module for dynamic import compatibility
+export {};

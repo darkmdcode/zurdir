@@ -5,27 +5,32 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: { 
-    unoptimized: true 
+    unoptimized: true,
+    remotePatterns: [{
+      protocol: 'https',
+      hostname: '**', // Allow all external images
+    }]
   },
-  // Enable instrumentation only in production
   experimental: {
-    instrumentationHook: process.env.NODE_ENV === 'production'
+    instrumentationHook: true, // Let env vars control activation
+    optimizePackageImports: ['@sentry/nextjs'] // Add this
   }
 };
 
-// Sentry configuration (production only)
 const sentryWebpackPluginOptions = {
-  silent: true, // Disable logs
-  authToken: process.env.SENTRY_AUTH_TOKEN, // From env vars
-  org: "darkmdcode",
-  project: "zurdir",
-  widenClientFileUpload: true,
+  silent: true,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  org: process.env.SENTRY_ORG || "darkmdcode",
+  project: process.env.SENTRY_PROJECT || "zurdir",
+  hideSourceMaps: true,
   disableLogger: true,
-  automaticVercelMonitors: false, // Disable if not using Vercel
-  hideSourceMaps: true // Prevent original code from being visible in production
+  // Auto-upload source maps without exposing code
+  sourceMapUploadOptions: {
+    rewrite: true,
+    stripCommonPrefix: true
+  }
 };
 
-// Only apply Sentry in production
-module.exports = process.env.NODE_ENV === 'production'
+module.exports = process.env.SENTRY_DSN 
   ? require("@sentry/nextjs").withSentryConfig(nextConfig, sentryWebpackPluginOptions)
   : nextConfig;

@@ -4,12 +4,14 @@
  * Sentry is disabled if DISABLE_SENTRY env variable is set.
  * To re-enable, unset DISABLE_SENTRY and restore original imports.
  */
-const DISABLE_SENTRY_CLIENT = process.env.DISABLE_SENTRY === 'true' || process.env.DISABLE_SENTRY === '1';
-const SentryClient = DISABLE_SENTRY_CLIENT ? require('./sentry.noop') : require('@sentry/nextjs');
 
+// Sentry is fully disabled for all environments. To re-enable, restore the original import and logic.
+import * as SentryClient from './sentry.noop';
 SentryClient.init({
-  // Add custom client-side Sentry options here if needed
+  // Sentry is disabled. Restore config here if re-enabling.
 });
+
+export {};
 
 // Ensure this file is treated as a module for dynamic import compatibility
 export {};

@@ -1,5 +1,6 @@
 "use client";
-import * as Sentry from '@sentry/nextjs';
+// Sentry is disabled. To re-enable, restore the import below.
+// import * as Sentry from '@sentry/nextjs';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -16,7 +17,8 @@ export class ErrorBoundary extends React.Component<{
   }
 
   componentDidCatch(error: Error, errorInfo: any) {
-    Sentry.captureException(error, { extra: errorInfo });
+  // Sentry is disabled. To re-enable, restore the line below.
+  // Sentry.captureException(error, { extra: errorInfo });
   }
 
   handleReset = () => {

@@ -8,16 +8,11 @@
  * To re-enable, unset DISABLE_SENTRY and restore original imports.
  */
 
-const DISABLE_SENTRY_SERVER = process.env.DISABLE_SENTRY === 'true' || process.env.DISABLE_SENTRY === '1';
-const SentryServer = DISABLE_SENTRY_SERVER ? require('./sentry.noop') : require('@sentry/nextjs');
 
-
+// Sentry is fully disabled for all environments. To re-enable, restore the original import and logic.
+import * as SentryServer from './sentry.noop';
 SentryServer.init({
-  dsn: process.env.SENTRY_DSN,
-  tracesSampleRate: 1,
-  enableLogs: true,
-  debug: false,
+  // Sentry is disabled. Restore config here if re-enabling.
 });
 
-// Ensure this file is treated as a module for dynamic import compatibility
 export {};

@@ -9,22 +9,11 @@
  * Sentry is disabled if DISABLE_SENTRY env variable is set.
  * To re-enable, unset DISABLE_SENTRY and restore original imports.
  */
-const DISABLE_SENTRY_EDGE = process.env.DISABLE_SENTRY === 'true' || process.env.DISABLE_SENTRY === '1';
-const SentryEdge = DISABLE_SENTRY_EDGE ? require('./sentry.noop') : require('@sentry/nextjs');
-const BrowserTracingEdge = DISABLE_SENTRY_EDGE ? undefined : require('@sentry/tracing').BrowserTracing;
 
+// Sentry is fully disabled for all environments. To re-enable, restore the original import and logic.
+import * as SentryEdge from './sentry.noop';
 SentryEdge.init({
-  dsn: process.env.SENTRY_DSN,
-  tracesSampleRate: 1.0,
-  debug: false,
-  integrations: [
-    BrowserTracingEdge ? new BrowserTracingEdge() : undefined
-  ].filter(Boolean),
-  // For logging, use this instead:
-  _experiments: {
-    captureConsole: true // Optional: captures console logs
-  }
+  // Sentry is disabled. Restore config here if re-enabling.
 });
 
-// Ensure this file is treated as a module for dynamic import compatibility
 export {};

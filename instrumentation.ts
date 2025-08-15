@@ -1,14 +1,8 @@
 // instrumentation.ts
-import * as Sentry from '@sentry/nextjs';
 
+// Sentry is fully disabled. To re-enable, restore the original logic below.
 export async function register() {
-  if (process.env.NEXT_RUNTIME === 'nodejs') {
-    await import('./sentry.server.config');
-  }
-
-  if (process.env.NEXT_RUNTIME === 'edge') {
-    await import('./sentry.edge.config');
-  }
+  // Sentry is disabled. No-op.
 }
 
 

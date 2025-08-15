@@ -21,7 +21,8 @@ const sentryWebpackPluginOptions = {
   project: "zurdir",
   widenClientFileUpload: true,
   disableLogger: true,
-  automaticVercelMonitors: false // Disable if not using Vercel
+  automaticVercelMonitors: false, // Disable if not using Vercel
+  hideSourceMaps: true // Prevent original code from being visible in production
 };
 
 // Only apply Sentry in production

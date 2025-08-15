@@ -13,15 +13,6 @@ class SentryExampleFrontendError extends Error {
 
 export default function Page() {
   const [hasSentError, setHasSentError] = useState(false);
-  const [isConnected, setIsConnected] = useState(true);
-  
-  useEffect(() => {
-    async function checkConnectivity() {
-      const result = await Sentry.diagnoseSdkConnectivity();
-      setIsConnected(result !== 'sentry-unreachable');
-    }
-    checkConnectivity();
-  }, []);
 
   return (
     <div>
@@ -48,18 +39,13 @@ export default function Page() {
         <button
           type="button"
           onClick={async () => {
-            await Sentry.startSpan({
-              name: 'Example Frontend/Backend Span',
-              op: 'test'
-            }, async () => {
-              const res = await fetch("/api/sentry-example-api");
-              if (!res.ok) {
-                setHasSentError(true);
-              }
-            });
+            // Simulate a Sentry span (not available in this version)
+            const res = await fetch("/api/sentry-example-api");
+            if (!res.ok) {
+              setHasSentError(true);
+            }
             throw new SentryExampleFrontendError("This error is raised on the frontend of the example page.");
           }}
-          disabled={!isConnected}
         >
           <span>
             Throw Sample Error
@@ -70,10 +56,6 @@ export default function Page() {
           <p className="success">
             Error sent to Sentry.
           </p>
-        ) : !isConnected ? (
-          <div className="connectivity-error">
-            <p>It looks like network requests to Sentry are being blocked, which will prevent errors from being captured. Try disabling your ad-blocker to complete the test.</p>
-          </div>
         ) : (
           <div className="success_placeholder" />
         )}

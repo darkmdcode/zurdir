@@ -21,9 +21,7 @@ export function generateMetadata(): Metadata {
   return {
     title: 'ZURDIR',
     description: 'An AI platform',
-    other: {
-      ...Sentry.getTraceData()  // Adds Sentry performance tracing
-    }
+    other: {}
   };
 }
 

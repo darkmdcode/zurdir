@@ -59,7 +59,7 @@ cd zurdir-platform
 **Configure Environment Variables:**
 ```env
 NODE_ENV=production
-PORT=10000
+PORT=3000
 DATABASE_URL=[Use connection string from step 3]
 JWT_SECRET=[Generate: openssl rand -base64 64]
 ADMIN_PASSCODE=[Your 6-digit admin code]

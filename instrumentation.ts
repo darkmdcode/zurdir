@@ -10,7 +10,7 @@ export async function register() {
     tracesSampleRate: 1.0,
     environment: process.env.NODE_ENV,
     enabled: !!process.env.SENTRY_DSN && process.env.DISABLE_SENTRY !== 'true',
-    // Add any other Sentry options here
+    //Add any other Sentry options here
   });
 }
 

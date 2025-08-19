@@ -37,10 +37,11 @@ async function startServer() {
     });
 
     const port = process.env.PORT || 3000;
-    app.listen(port, () => {
-      console.log(`🚀 Server running on port ${port}`);
-      console.log(`Frontend: http://localhost:${port}`);
-      console.log(`Backend API: http://localhost:${port}/api`);
+    const host = '0.0.0.0';
+    app.listen(port, host, () => {
+      console.log(`🚀 Server running on ${host}:${port}`);
+      console.log(`Frontend: http://${host}:${port}`);
+      console.log(`Backend API: http://${host}:${port}/api`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);

@@ -65,7 +65,6 @@ JWT_SECRET=[Generate: openssl rand -base64 64]
 ADMIN_PASSCODE=[Your 6-digit admin code]
 ENCRYPTION_KEY=[Generate: openssl rand -hex 16]
 OLLAMA_BASE_URL=https://ollama.cosmictools.us
-SENTRY_DSN=[Optional: Your Sentry DSN]
 ```
 
 **Generate Secure Keys:**
@@ -98,7 +97,7 @@ openssl rand -hex 16
 ```env
 NODE_ENV=production
 NEXT_PUBLIC_API_URL=https://zurdir-backend.onrender.com
-NEXT_PUBLIC_SENTRY_DSN=[Optional: Your public Sentry DSN]
+
 ```
 
 **⚠️ Important**: Replace `zurdir-backend` with your actual backend service name.
@@ -157,7 +156,7 @@ The provided `render.yaml` should work automatically, but verify service names m
 - `ENCRYPTION_KEY`: Backup encryption (32 characters)
 
 **Optional:**
-- `SENTRY_DSN`: Error tracking
+
 - `OLLAMA_CUSTOM_URL`: Override AI endpoint
 - `MAX_FILE_SIZE`: Upload limit (default: 100MB)
 - `ENABLE_WEB_SEARCH`: Enable/disable search
@@ -276,7 +275,7 @@ All necessary indexes are created automatically during migration.
 - [ ] Generate strong JWT_SECRET
 - [ ] Set secure ADMIN_PASSCODE
 - [ ] Configure HTTPS enforcement
-- [ ] Set up Sentry error tracking
+
 - [ ] Review CORS settings
 - [ ] Test authentication flows
 - [ ] Verify database access controls

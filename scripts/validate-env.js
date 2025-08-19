@@ -1,7 +1,8 @@
 // scripts/validate-env.js
 require('dotenv').config();
 const requiredVars = [
-  'DATABASE_URL',
+  'DATABASE_TYPE',
+  'DATABASE_PATH',
   'JWT_SECRET',
   'ADMIN_PASSCODE',
   'ENCRYPTION_KEY',

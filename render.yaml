@@ -2,7 +2,7 @@ services:
   - type: web
     name: zurdir-frontend
     env: node
-    nodeVersion: 18
+    nodeVersion: 20
     plan: starter
     build:
       cache:
@@ -32,7 +32,7 @@ services:
   - type: web
     name: zurdir-backend
     env: node
-    nodeVersion: 18
+    nodeVersion: 20
     plan: starter
     buildCommand: |
       npm install

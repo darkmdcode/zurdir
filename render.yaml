@@ -33,20 +33,15 @@ services:
     buildCommand: cd backend && npm ci
     startCommand: cd backend && npm start
     envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: zurdir-db
-          property: connectionString
+      - key: DATABASE_TYPE
+        value: sqlite
+      - key: DATABASE_PATH
+        value: db/zurdir.sqlite
       - key: JWT_SECRET
         generateValue: true
         length: 64
       - key: ENCRYPTION_KEY
         generateValue: true
         length: 32
-
-databases:
-  - name: zurdir-db
-    plan: starter
-    ipAllowList: 
       - zurdir-frontend
       - zurdir-backend

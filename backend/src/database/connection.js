@@ -1,25 +1,33 @@
-const { Pool } = require('pg');
+const Database = require('better-sqlite3');
+const path = require('path');
 require('dotenv').config();
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
+const dbPath = path.join(__dirname, '../../db/zurdir.sqlite');
+const db = new Database(dbPath);
 
-// Test connection
-pool.on('connect', () => {
-  console.log('✅ Connected to PostgreSQL database');
-});
+// Enable foreign keys
+db.pragma('foreign_keys = ON');
 
-pool.on('error', (err) => {
-  console.error('❌ PostgreSQL connection error:', err);
-});
+console.log('✅ Connected to SQLite database');
 
 module.exports = {
-  query: (text, params) => pool.query(text, params),
-  getClient: () => pool.connect(),
-  pool
+  query: (text, params = []) => {
+    // Convert PostgreSQL $1, $2 style params to SQLite ? style
+    const sqliteText = text.replace(/\$\d+/g, '?');
+    
+    try {
+      if (text.trim().toLowerCase().startsWith('select')) {
+        const stmt = db.prepare(sqliteText);
+        return { rows: stmt.all(params) };
+      } else {
+        const stmt = db.prepare(sqliteText);
+        const result = stmt.run(params);
+        return { rows: [result] };
+      }
+    } catch (error) {
+      console.error('Database error:', error);
+      throw error;
+    }
+  },
+  getClient: () => db
 };

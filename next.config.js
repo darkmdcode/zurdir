@@ -22,9 +22,4 @@ const nextConfig = {
   optimizeFonts: true
 };
 
-module.exports = {
-  output: 'standalone', // Critical for Render
-  env: {
-    PORT: process.env.PORT || '3000' // Force port inheritance
-  }
-}
+module.exports = nextConfig;

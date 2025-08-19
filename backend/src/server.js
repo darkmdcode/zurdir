@@ -7,17 +7,6 @@ const { createServer } = require('http');
 const WebSocket = require('ws');
 require('dotenv').config();
 
-// Import Sentry
-const Sentry = require('@sentry/node');
-
-// Initialize Sentry
-if (process.env.SENTRY_DSN) {
-  Sentry.init({
-    dsn: process.env.SENTRY_DSN,
-    environment: process.env.NODE_ENV || 'development'
-  });
-}
-
 const app = express();
 const server = createServer(app);
 const wss = new WebSocket.Server({ server });

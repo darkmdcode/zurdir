@@ -1,14 +1,24 @@
 const Database = require('better-sqlite3');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
-const dbPath = path.join(__dirname, '../../db/zurdir.sqlite');
+// Use absolute path that works in both dev and production
+const dbDir = path.join(process.cwd(), 'db');
+const dbPath = path.join(dbDir, 'zurdir.sqlite');
+
+// Create db directory if it doesn't exist
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+  console.log('📁 Created database directory:', dbDir);
+}
+
 const db = new Database(dbPath);
 
 // Enable foreign keys
 db.pragma('foreign_keys = ON');
 
-console.log('✅ Connected to SQLite database');
+console.log('✅ Connected to SQLite database at:', dbPath);
 
 module.exports = {
   query: (text, params = []) => {

@@ -35,7 +35,7 @@ services:
     env: node
     plan: starter
     buildCommand: cd backend && npm ci
-    startCommand: cd backend && npm start
+    startCommand: cd backend && mkdir -p db && npm start
     envVars:
       - key: DATABASE_TYPE
         value: sqlite

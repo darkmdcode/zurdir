@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "prebuild": "npm install dotenv && node scripts/validate-env.js",
-    "build": "next build && mkdir -p .next/standalone && cp standalone-server.js .next/standalone/ && mkdir -p .next/standalone/backend && cp -r backend/src .next/standalone/backend/ && cp backend/package.json .next/standalone/backend/ && cd .next/standalone/backend && npm install --only=production",
+    "build": "next build && mkdir -p .next/standalone && cp -r .next/static .next/standalone/.next/ && cp standalone-server.js .next/standalone/ && mkdir -p .next/standalone/backend && cp -r backend/src .next/standalone/backend/ && cp backend/package.json .next/standalone/backend/ && cd .next/standalone/backend && npm install --only=production",
     "start": "node -e \"const fs = require('fs'); const path = require('path'); const dbDir = path.join(process.cwd(), 'db'); if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir, { recursive: true }); console.log('Database directory ready:', dbDir)\" && node .next/standalone/standalone-server.js",   
     "lint": "next lint",
     "server": "cd backend && npm start",

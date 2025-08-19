@@ -16,8 +16,17 @@ async function startServer() {
 
     // Import and configure Next.js handler
     const next = require('next');
-    const dev = process.env.NODE_ENV !== 'production';
-    const nextApp = next({ dev, dir: path.join(__dirname) });
+    const dev = false; // Always use production mode in standalone
+    const nextApp = next({
+      dev,
+      dir: path.join(__dirname),
+      conf: { 
+        distDir: '.next',
+        experimental: {
+          instrumentationHook: true
+        }
+      }
+    });
     const handle = nextApp.getRequestHandler();
 
     await nextApp.prepare();

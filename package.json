@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "node -e \"const fs = require('fs'); const path = require('path'); const dbDir = path.join(process.cwd(), 'db'); if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir, { recursive: true }); console.log('Database directory ready:', dbDir)\" && node .next/standalone/server.js",
+    "start": "NODE_ENV=production node server.js",
     "lint": "next lint",
     "server": "cd backend && npm start",
     "server:dev": "cd backend && npm run dev",

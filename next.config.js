@@ -4,16 +4,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  outputFileTracing: true,
-  // Copy additional files needed for the backend
-  serverComponentsExternalPackages: ['better-sqlite3'],
-  experimental: {
-    outputStandalone: true,
-    outputFileTracingRoot: process.cwd(),
-    outputFileTracingIncludes: {
-      '**': ['backend/**/*', 'standalone-server.js'],
-    },
-  },
   images: { 
     unoptimized: true,
     remotePatterns: [{

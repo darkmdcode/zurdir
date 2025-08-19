@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "prebuild": "npm install dotenv && node scripts/validate-env.js",
-  "build": "next build && if not exist .next\\standalone mkdir .next\\standalone && copy standalone-server.js .next\\standalone\\",
-  "start": "node .next/standalone/standalone-server.js",
+    "build": "next build && mkdir -p .next/standalone && cp standalone-server.js .next/standalone/",
+    "start": "node .next/standalone/standalone-server.js",
     "lint": "next lint",
     "server": "cd backend && npm start",
     "server:dev": "cd backend && npm run dev",

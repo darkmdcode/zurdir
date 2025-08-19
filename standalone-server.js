@@ -1,23 +1,42 @@
 const express = require('express');
-const { initializeDatabase } = require('./backend/src/database/migrate');
-const backendApp = require('./backend/src/server');
+const path = require('path');
 
-// Initialize database
-initializeDatabase().catch(error => {
-  console.error('Failed to initialize database:', error);
-  process.exit(1);
-});
+async function startServer() {
+  try {
+    // Initialize database
+    const { initializeDatabase } = require('./backend/src/database/migrate');
+    await initializeDatabase();
 
-// Create Express app
-const app = express();
+    // Create Express app
+    const app = express();
 
-// Mount the backend API
-app.use('/api', backendApp);
+    // Import and mount the backend API
+    const backendApp = require('./backend/src/server');
+    app.use('/api', backendApp);
 
-// Mount the Next.js handler
-app.use(require('./.next/standalone/server.js'));
+    // Import and configure Next.js handler
+    const next = require('next');
+    const dev = process.env.NODE_ENV !== 'production';
+    const nextApp = next({ dev, dir: path.join(__dirname) });
+    const handle = nextApp.getRequestHandler();
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`> Ready on http://localhost:${port}`);
-});
+    await nextApp.prepare();
+
+    // Handle all other routes with Next.js
+    app.all('*', (req, res) => {
+      return handle(req, res);
+    });
+
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log(`🚀 Server running on port ${port}`);
+      console.log(`Frontend: http://localhost:${port}`);
+      console.log(`Backend API: http://localhost:${port}/api`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+startServer();

@@ -8,8 +8,12 @@ services:
         paths:
           - .next/cache
           - node_modules
-    buildCommand: npm ci && npm run build
-    startCommand: node standalone-server.js
+    buildCommand: |
+      npm ci
+      npm run build
+      cp -r backend .next/standalone/
+      cp standalone-server.js .next/standalone/
+    startCommand: node .next/standalone/standalone-server.js
     envVars:
       - key: NODE_ENV
         value: production

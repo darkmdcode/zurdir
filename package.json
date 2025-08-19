@@ -6,13 +6,14 @@
     "dev": "next dev",
     "prebuild": "npm install dotenv && node scripts/validate-env.js",
     "build": "next build",
-    "start": "node server.js",
+    "start": "node .next/standalone/server.js",
     "lint": "next lint",
     "server": "cd backend && npm start",
     "server:dev": "cd backend && npm run dev",
     "postinstall": "cd backend && npm install"
   },
   "dependencies": {
+    "express": "^4.18.2",
     "@hookform/resolvers": "^3.9.0",
     "@next/swc-wasm-nodejs": "13.5.1",
     "@radix-ui/react-accordion": "^1.2.0",

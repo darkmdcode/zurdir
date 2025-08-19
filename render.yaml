@@ -9,7 +9,7 @@ services:
           - .next/cache
           - node_modules
     buildCommand: npm ci && npm run build
-    startCommand: npm start
+    startCommand: node standalone-server.js
     envVars:
       - key: NODE_ENV
         value: production

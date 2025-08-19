@@ -55,9 +55,7 @@ async function initialize() {
 app.use(helmet());
 app.use(compression());
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.NEXT_PUBLIC_API_URL, 'https://zurdir.onrender.com'] 
-    : ['http://localhost:3000'],
+  origin: true, // Since we're on the same domain
   credentials: true
 }));
 
@@ -134,16 +132,14 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-// Initialize database and start server
-initialize().then(() => {
-  server.listen(PORT, () => {
-    console.log(`🚀 ZURDIR Backend running on port ${PORT}`);
-    console.log(`🌟 Environment: ${process.env.NODE_ENV}`);
-  });
-}).catch(error => {
-  console.error('Failed to start server:', error);
+// Initialize the database
+initialize().catch(error => {
+  console.error('Failed to initialize database:', error);
   process.exit(1);
 });
+
+// Export the Express app
+module.exports = app;
 
 // Graceful shutdown
 process.on('SIGINT', () => {

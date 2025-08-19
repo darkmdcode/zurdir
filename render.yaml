@@ -9,10 +9,8 @@ services:
           - .next/cache
           - node_modules
     buildCommand: |
-      npm ci
+      npm install
       npm run build
-      cp -r backend .next/standalone/
-      cp standalone-server.js .next/standalone/
     startCommand: node .next/standalone/standalone-server.js
     envVars:
       - key: NODE_ENV
@@ -34,7 +32,10 @@ services:
     name: zurdir-backend
     env: node
     plan: starter
-    buildCommand: npm ci, npm run build, cp -r backend .next/standalone/, cp standalone-server.js .next/standalone/, cd .next/standalone/backend && npm ci --only=production
+    buildCommand: |
+      npm install
+      cd backend
+      npm install
     startCommand: cd backend && mkdir -p db && npm start
     envVars:
       - key: DATABASE_TYPE

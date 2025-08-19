@@ -2,6 +2,9 @@
   "name": "zurdir-platform",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "dev": "nodemon src/server.js",
     "prebuild": "npm install dotenv && node scripts/validate-env.js",

@@ -12,14 +12,25 @@ const nextConfig = {
     }]
   },
   experimental: {
-    instrumentationHook: true, // Let env vars control activation
-    missingSuspenseWithCSRBailout: true // Critical for Render/Next.js 14
+    instrumentationHook: true,
+    missingSuspenseWithCSRBailout: true,
+    optimizePackageImports: true
   },
   // Render/production optimizations
   productionBrowserSourceMaps: false,
   reactStrictMode: true,
   swcMinify: true,
-  optimizeFonts: true
+  optimizeFonts: true,
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false
+      };
+    }
+    return config;
+  }
 };
 
 module.exports = nextConfig;

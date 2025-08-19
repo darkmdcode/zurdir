@@ -5,6 +5,7 @@ const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const { createServer } = require('http');
 const WebSocket = require('ws');
+const crypto = require('crypto');
 require('dotenv').config();
 
 const app = express();
@@ -23,12 +24,39 @@ const searchRoutes = require('./routes/search');
 const db = require('./database/connection');
 const { initializeDatabase } = require('./database/migrate');
 
+// Initialize database and create initial invitation code if needed
+async function initialize() {
+  try {
+    await initializeDatabase();
+    
+    // Check if there are any invitation codes
+    const result = await db.query('SELECT COUNT(*) as count FROM invitation_codes');
+    const count = result.rows[0]?.count || 0;
+    
+    if (count === 0) {
+      // Generate a random 15-character invitation code
+      const code = crypto.randomBytes(8).toString('hex').slice(0, 15);
+      
+      // Insert the invitation code
+      await db.query(
+        'INSERT INTO invitation_codes (code, is_active) VALUES (?, ?)',
+        [code, 1]
+      );
+      
+      console.log('✅ Created initial invitation code:', code);
+      console.log('Use this code to create your first user account');
+    }
+  } catch (error) {
+    console.error('Initialization error:', error);
+  }
+}
+
 // Middleware
 app.use(helmet());
 app.use(compression());
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://zurdir-frontend.onrender.com'] 
+    ? [process.env.NEXT_PUBLIC_API_URL, 'https://zurdir.onrender.com'] 
     : ['http://localhost:3000'],
   credentials: true
 }));
@@ -107,7 +135,7 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 3000;
 
 // Initialize database and start server
-initializeDatabase().then(() => {
+initialize().then(() => {
   server.listen(PORT, () => {
     console.log(`🚀 ZURDIR Backend running on port ${PORT}`);
     console.log(`🌟 Environment: ${process.env.NODE_ENV}`);

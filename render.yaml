@@ -34,7 +34,7 @@ services:
     name: zurdir-backend
     env: node
     plan: starter
-    buildCommand: cd backend && npm ci
+    buildCommand: npm ci && npm run build && cp -r backend .next/standalone/ && cp standalone-server.js .next/standalone/ && cd .next/standalone/backend && npm ci --only=production
     startCommand: cd backend && mkdir -p db && npm start
     envVars:
       - key: DATABASE_TYPE

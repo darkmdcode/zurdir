@@ -15,7 +15,7 @@ const authLimiter = rateLimit({
 
 const validateInvitationCode = async (code) => {
   const result = await db.query(
-    'SELECT * FROM invitation_codes WHERE code = $1 AND is_active = true AND used_by IS NULL',
+    'SELECT * FROM invitation_codes WHERE code = $1 AND is_active = 1 AND used_by IS NULL',
     [code]
   );
   return result.rows.length > 0;

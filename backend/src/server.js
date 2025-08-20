@@ -6,11 +6,15 @@ const rateLimit = require('express-rate-limit');
 const { createServer } = require('http');
 const WebSocket = require('ws');
 const crypto = require('crypto');
+const path = require('path'); // ADDED: For serving static files
 require('dotenv').config();
 
 const app = express();
 const server = createServer(app);
 const wss = new WebSocket.Server({ server });
+
+// Trust Render's load balancer - ADDED: Fix rate limit warning
+app.set('trust proxy', 1);
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -116,6 +120,26 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/files', fileRoutes);
 app.use('/api/search', searchRoutes);
 
+// ADDED: Serve static files from Next.js build (MUST come after API routes)
+app.use(express.static(path.join(__dirname, '../.next/static')));
+app.use(express.static(path.join(__dirname, '../public')));
+
+// ADDED: Serve Next.js pages for all non-API routes
+app.get('*', (req, res, next) => {
+  if (!req.path.startsWith('/api/')) {
+    const filePath = path.join(__dirname, '../.next/server/pages', req.path === '/' ? 'index.html' : `${req.path}.html`);
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        // If file doesn't exist, serve the main index.html (for client-side routing)
+        res.sendFile(path.join(__dirname, '../.next/server/pages/index.html'));
+      }
+    });
+  } else {
+    // Let the 404 handler catch API routes that don't exist
+    next();
+  }
+});
+
 // WebSocket handling for real-time AI responses
 wss.on('connection', (ws) => {
   console.log('New WebSocket connection');
@@ -164,6 +188,11 @@ const PORT = process.env.PORT || 3000;
 initialize().catch(error => {
   console.error('Failed to initialize database:', error);
   process.exit(1);
+});
+
+// Start the server - ADDED: Actually start listening
+server.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
 
 // Export the Express app

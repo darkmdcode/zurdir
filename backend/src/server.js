@@ -133,7 +133,7 @@ app.get('*', (req, res, next) => {
   }
   
   // Try to serve the HTML file
-  const htmlPath = path.join(__dirname, '../../.next/server/pages', req.path === '/' ? 'index.html' : `${req.path}.html`);
+const htmlPath = path.join(__dirname, '../../.next/server/app', req.path === '/' ? 'index.html' : `${req.path}.html`);
   
   res.sendFile(htmlPath, (err) => {
     if (err) {

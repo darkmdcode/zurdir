@@ -6,14 +6,15 @@ const rateLimit = require('express-rate-limit');
 const { createServer } = require('http');
 const WebSocket = require('ws');
 const crypto = require('crypto');
-const path = require('path'); // ADDED: For serving static files
+const path = require('path');
+const fs = require('fs'); // ADDED: For file system access
 require('dotenv').config();
 
 const app = express();
 const server = createServer(app);
 const wss = new WebSocket.Server({ server });
 
-// Trust Render's load balancer - ADDED: Fix rate limit warning
+// Trust Render's load balancer
 app.set('trust proxy', 1);
 
 // Import routes
@@ -58,7 +59,7 @@ async function initialize() {
 // Middleware
 app.use(
   helmet({
-    contentSecurityPolicy: false // We'll set CSP manually below
+    contentSecurityPolicy: false
   })
 );
 app.use(compression());
@@ -93,8 +94,8 @@ app.use((req, res, next) => {
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100,
   message: 'Too many requests from this IP, please try again later.'
 });
 
@@ -120,64 +121,36 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/files', fileRoutes);
 app.use('/api/search', searchRoutes);
 
-// ADDED: Serve static files from Next.js build (MUST come after API routes)
-app.use(express.static(path.join(__dirname, '../../.next/static')));
-app.use(express.static(path.join(__dirname, '../../public')));
+// FIXED: Serve static files with explicit paths FIRST
+app.use('/_next/static', express.static(path.join(__dirname, '../../.next/static')));
+app.use('/static', express.static(path.join(__dirname, '../../public')));
 
-// ADDED: Serve Next.js pages for all non-API routes
-// Serve Next.js App Router HTML files for all non-API routes
+// FIXED: Simple catch-all for HTML pages - ONLY for non-static, non-API routes
 app.get('*', (req, res, next) => {
-  if (!req.path.startsWith('/api/')) {
-    // Determine the base directory for Next.js build output
-    // Try standalone output first, then fallback to regular .next output
-    const baseAppDirStandalone = path.join(__dirname, '../../.next/standalone/.next/server/app');
-    const baseAppDir = path.join(__dirname, '../../.next/server/app');
-
-    // Normalize the request path to match built HTML files
-    let routePath = req.path;
-    if (routePath.endsWith('/')) routePath = routePath.slice(0, -1);
-    if (routePath === '') routePath = '/index';
-
-    // Try to serve the HTML file for the route
-    const htmlFile = routePath + '.html';
-    const tryFiles = [
-      path.join(baseAppDirStandalone, htmlFile),
-      path.join(baseAppDir, htmlFile),
-      path.join(baseAppDirStandalone, 'index.html'),
-      path.join(baseAppDir, 'index.html')
-    ];
-
-    // Try each file in order, serve the first that exists
-    const fs = require('fs');
-    (function tryNext(i) {
-      if (i >= tryFiles.length) {
-        // If nothing found, 404
-        return res.status(404).send('Not found');
-      }
-      fs.access(tryFiles[i], fs.constants.F_OK, (err) => {
-        if (!err) {
-          return res.sendFile(tryFiles[i]);
-        } else {
-          tryNext(i + 1);
-        }
-      });
-    })(0);
-  } else {
-    // Let the 404 handler catch API routes that don't exist
-    next();
+  // Skip API routes and static file requests
+  if (req.path.startsWith('/api/') || req.path.startsWith('/_next/') || req.path.startsWith('/static/')) {
+    return next();
   }
+  
+  // Try to serve the HTML file
+  const htmlPath = path.join(__dirname, '../../.next/server/pages', req.path === '/' ? 'index.html' : `${req.path}.html`);
+  
+  res.sendFile(htmlPath, (err) => {
+    if (err) {
+      // Fallback to index.html for client-side routing
+      res.sendFile(path.join(__dirname, '../../.next/server/pages/index.html'));
+    }
+  });
 });
 
-// WebSocket handling for real-time AI responses
+// WebSocket handling
 wss.on('connection', (ws) => {
   console.log('New WebSocket connection');
   
   ws.on('message', async (message) => {
     try {
       const data = JSON.parse(message);
-      // Handle WebSocket messages for AI streaming
       if (data.type === 'ai_stream') {
-        // Implement AI streaming logic here
         ws.send(JSON.stringify({ type: 'ai_response', data: 'Response chunk' }));
       }
     } catch (error) {
@@ -218,12 +191,11 @@ initialize().catch(error => {
   process.exit(1);
 });
 
-// Start the server - ADDED: Actually start listening
+// Start the server
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
 
-// Export the Express app
 module.exports = app;
 
 // Graceful shutdown

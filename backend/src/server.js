@@ -121,17 +121,17 @@ app.use('/api/files', fileRoutes);
 app.use('/api/search', searchRoutes);
 
 // ADDED: Serve static files from Next.js build (MUST come after API routes)
-app.use(express.static(path.join(__dirname, '../.next/static')));
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../../.next/static')));
+app.use(express.static(path.join(__dirname, '../../public')));
 
 // ADDED: Serve Next.js pages for all non-API routes
 app.get('*', (req, res, next) => {
   if (!req.path.startsWith('/api/')) {
-    const filePath = path.join(__dirname, '../.next/server/pages', req.path === '/' ? 'index.html' : `${req.path}.html`);
+    const filePath = path.join(__dirname, '../../.next/server/pages', req.path === '/' ? 'index.html' : `${req.path}.html`);
     res.sendFile(filePath, (err) => {
       if (err) {
         // If file doesn't exist, serve the main index.html (for client-side routing)
-        res.sendFile(path.join(__dirname, '../.next/server/pages/index.html'));
+        res.sendFile(path.join(__dirname, '../../.next/server/pages/index.html'));
       }
     });
   } else {

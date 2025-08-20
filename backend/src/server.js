@@ -52,12 +52,40 @@ async function initialize() {
 }
 
 // Middleware
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false // We'll set CSP manually below
+  })
+);
 app.use(compression());
 app.use(cors({
-  origin: true, // Since we're on the same domain
+  origin: process.env.NODE_ENV === 'production' ? true : [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3001'
+  ],
   credentials: true
 }));
+
+// Set strict CSP to prevent browser extension script injection
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline'",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "img-src 'self' data: https://*",
+      "font-src 'self' https://fonts.gstatic.com",
+      "connect-src 'self' https://* ws://* wss://*",
+      "frame-src 'self'",
+      "object-src 'none'",
+      "base-uri 'self'"
+    ].join('; ')
+  );
+  next();
+});
 
 // Rate limiting
 const limiter = rateLimit({

@@ -53,7 +53,7 @@ export function AdminPanel() {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`, {
+  const response = await fetch(`/api/admin/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ export function AdminPanel() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/users`, {
+  const response = await fetch(`/api/admin/users`, {
         headers: {
           'X-Admin-Passcode': adminPasscode
         }
@@ -102,7 +102,7 @@ export function AdminPanel() {
 
   const fetchInvitationCodes = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/invitation-codes`, {
+  const response = await fetch(`/api/admin/invitation-codes`, {
         headers: {
           'X-Admin-Passcode': adminPasscode
         }
@@ -119,7 +119,7 @@ export function AdminPanel() {
 
   const fetchChatStats = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/chat-stats`, {
+  const response = await fetch(`/api/admin/chat-stats`, {
         headers: {
           'X-Admin-Passcode': adminPasscode
         }
@@ -143,7 +143,7 @@ export function AdminPanel() {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/invitation-codes`, {
+  const response = await fetch(`/api/admin/invitation-codes`, {
         method: 'POST',
         headers: {
           'X-Admin-Passcode': adminPasscode,
@@ -167,7 +167,7 @@ export function AdminPanel() {
 
   const toggleInvitationCode = async (id: string, isActive: boolean) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/invitation-codes/${id}`, {
+  const response = await fetch(`/api/admin/invitation-codes/${id}`, {
         method: 'PATCH',
         headers: {
           'X-Admin-Passcode': adminPasscode,

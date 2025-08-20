@@ -45,7 +45,7 @@ export function WebSearch() {
         return;
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/search/web`, {
+  const response = await fetch(`/api/search/web`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

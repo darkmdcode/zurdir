@@ -39,7 +39,7 @@ export default function Page() {
           type="button"
           onClick={async () => {
             // Simulate a Sentry span (not available in this version)
-            const res = await fetch("/api/sentry-example-api");
+            const res = await fetch("/api/sentry-example-api"); // Already relative path, no change needed
             if (!res.ok) {
               setHasSentError(true);
             }

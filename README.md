@@ -95,8 +95,11 @@ JWT_SECRET=your-super-secret-jwt-key-here-make-it-very-long-and-random
 ADMIN_PASSCODE=123456
 ENCRYPTION_KEY=your-32-character-encryption-key-here
 
+
 # API Configuration
-NEXT_PUBLIC_API_URL=http://localhost:3001
+# For local development, set NEXT_PUBLIC_API_URL to your backend URL (e.g. http://localhost:3001)
+# For production, leave NEXT_PUBLIC_API_URL blank to use same-origin relative API paths
+NEXT_PUBLIC_API_URL=
 PORT=3001
 
 # Ollama
@@ -128,6 +131,7 @@ Visit http://localhost:3000
 3. **Environment Variables**: Add required env vars in Render dashboard
 4. **Deploy**: Render will automatically build and deploy
 
+
 ### Environment Variables for Production
 ```env
 NODE_ENV=production
@@ -137,6 +141,8 @@ ADMIN_PASSCODE=[Your 6-digit admin code]
 ENCRYPTION_KEY=[Generate 32-character key]
 SENTRY_DSN=[Optional: Sentry error tracking]
 OLLAMA_BASE_URL=https://ollama.cosmictools.us
+# Leave NEXT_PUBLIC_API_URL blank for production (uses same-origin API calls)
+NEXT_PUBLIC_API_URL=
 ```
 
 ### Manual Render Setup

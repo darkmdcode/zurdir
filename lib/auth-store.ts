@@ -18,7 +18,9 @@ interface AuthState {
   checkAuth: () => Promise<boolean>;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_URL = typeof window === 'undefined' && process.env.NEXT_PUBLIC_API_URL
+  ? process.env.NEXT_PUBLIC_API_URL
+  : '';
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -29,7 +31,7 @@ export const useAuthStore = create<AuthState>()(
 
       login: async (username: string, passcode: string, stayLoggedIn = false) => {
         try {
-          const response = await fetch(`${API_URL}/api/auth/login`, {
+          const response = await fetch(`/api/auth/login`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -63,7 +65,7 @@ export const useAuthStore = create<AuthState>()(
 
       register: async (username: string, passcode: string, invitationCode: string) => {
         try {
-          const response = await fetch(`${API_URL}/api/auth/register`, {
+          const response = await fetch(`/api/auth/register`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -110,7 +112,7 @@ export const useAuthStore = create<AuthState>()(
             return false;
           }
 
-          const response = await fetch(`${API_URL}/api/auth/verify`, {
+          const response = await fetch(`/api/auth/verify`, {
             headers: {
               'Authorization': `Bearer ${token}`,
             },

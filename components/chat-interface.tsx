@@ -53,7 +53,7 @@ export function ChatInterface({ selectedSessionId, onSessionChange }: ChatInterf
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/ai/models`, {
+  const response = await fetch(`/api/ai/models`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -80,7 +80,7 @@ export function ChatInterface({ selectedSessionId, onSessionChange }: ChatInterf
       if (!token) return;
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/ai/sessions/${selectedSessionId}/messages`,
+        `/api/ai/sessions/${selectedSessionId}/messages`,
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -129,7 +129,7 @@ export function ChatInterface({ selectedSessionId, onSessionChange }: ChatInterf
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/ai/chat`, {
+  const response = await fetch(`/api/ai/chat`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -31,6 +31,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://*; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://* ws://* wss://*; frame-src 'self'; object-src 'none'; base-uri 'self'"
+        />
+      </head>
       <body className={`${inter.variable} ${spaceMono.variable} min-h-screen bg-[#1A1A1A] text-white font-inter`}>
         <ThemeProvider
           attribute="class"

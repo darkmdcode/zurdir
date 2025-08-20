@@ -175,7 +175,7 @@ router.post('/chat', authenticateToken, async (req, res) => {
 
     // Update session timestamp
     await db.query(
-      'UPDATE chat_sessions SET updated_at = NOW() WHERE id = $1',
+      'UPDATE chat_sessions SET updated_at = datetime(\'now\') WHERE id = $1',
       [sessionId]
     );
 

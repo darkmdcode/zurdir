@@ -72,7 +72,7 @@ router.post('/register', authLimiter, async (req, res) => {
 
     // Mark invitation code as used
     await db.query(
-      'UPDATE invitation_codes SET used_by = $1, used_at = NOW() WHERE code = $2',
+      'UPDATE invitation_codes SET used_by = $1, used_at = datetime(\'now\') WHERE code = $2',
       [result.rows[0].id, invitationCode]
     );
 

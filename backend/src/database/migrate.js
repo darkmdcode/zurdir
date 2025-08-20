@@ -6,7 +6,7 @@ const initializeDatabase = async () => {
     console.log('🔧 Initializing SQLite database...');
 
     // Users table
-    db.query(`
+    await db.query(`
       CREATE TABLE IF NOT EXISTS users (
         id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
         username TEXT UNIQUE NOT NULL,
@@ -22,7 +22,7 @@ const initializeDatabase = async () => {
     `);
 
     // Invitation codes table
-    db.query(`
+    await db.query(`
       CREATE TABLE IF NOT EXISTS invitation_codes (
         id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
         code TEXT UNIQUE NOT NULL,
@@ -34,7 +34,7 @@ const initializeDatabase = async () => {
     `);
 
     // Chat sessions table
-    db.query(`
+    await db.query(`
       CREATE TABLE IF NOT EXISTS chat_sessions (
         id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
         user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -45,7 +45,7 @@ const initializeDatabase = async () => {
     `);
 
     // Chat messages table (without vector embeddings)
-    db.query(`
+    await db.query(`
       CREATE TABLE IF NOT EXISTS chat_messages (
         id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
         session_id TEXT NOT NULL REFERENCES chat_sessions(id) ON DELETE CASCADE,
@@ -58,7 +58,7 @@ const initializeDatabase = async () => {
     `);
 
     // AI models table
-    db.query(`
+    await db.query(`
       CREATE TABLE IF NOT EXISTS ai_models (
         id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
         name TEXT NOT NULL,
@@ -71,7 +71,7 @@ const initializeDatabase = async () => {
     `);
 
     // File uploads table
-    db.query(`
+    await db.query(`
       CREATE TABLE IF NOT EXISTS file_uploads (
         id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
         user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -85,7 +85,7 @@ const initializeDatabase = async () => {
     `);
 
     // System logs table
-    db.query(`
+    await db.query(`
       CREATE TABLE IF NOT EXISTS system_logs (
         id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
         level TEXT NOT NULL,
@@ -96,7 +96,7 @@ const initializeDatabase = async () => {
     `);
 
     // Error logs table
-    db.query(`
+    await db.query(`
       CREATE TABLE IF NOT EXISTS error_logs (
         id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
         user_id TEXT REFERENCES users(id),
@@ -109,13 +109,13 @@ const initializeDatabase = async () => {
     `);
 
     // Create indexes
-    db.query('CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);');
-    db.query('CREATE INDEX IF NOT EXISTS idx_users_invitation_code ON users(invitation_code);');
-    db.query('CREATE INDEX IF NOT EXISTS idx_chat_messages_session_id ON chat_messages(session_id);');
-    db.query('CREATE INDEX IF NOT EXISTS idx_chat_messages_user_id ON chat_messages(user_id);');
-    db.query('CREATE INDEX IF NOT EXISTS idx_file_uploads_user_id ON file_uploads(user_id);');
-    db.query('CREATE INDEX IF NOT EXISTS idx_system_logs_created_at ON system_logs(created_at);');
-    db.query('CREATE INDEX IF NOT EXISTS idx_error_logs_created_at ON error_logs(created_at);');
+    await db.query('CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);');
+    await db.query('CREATE INDEX IF NOT EXISTS idx_users_invitation_code ON users(invitation_code);');
+    await db.query('CREATE INDEX IF NOT EXISTS idx_chat_messages_session_id ON chat_messages(session_id);');
+    await db.query('CREATE INDEX IF NOT EXISTS idx_chat_messages_user_id ON chat_messages(user_id);');
+    await db.query('CREATE INDEX IF NOT EXISTS idx_file_uploads_user_id ON file_uploads(user_id);');
+    await db.query('CREATE INDEX IF NOT EXISTS idx_system_logs_created_at ON system_logs(created_at);');
+    await db.query('CREATE INDEX IF NOT EXISTS idx_error_logs_created_at ON error_logs(created_at);');
 
     console.log('✅ SQLite database initialized successfully');
   } catch (error) {

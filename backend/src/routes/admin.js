@@ -127,7 +127,7 @@ router.get('/chat-stats', authenticateAdmin, async (req, res) => {
   try {
     const totalSessions = await db.query('SELECT COUNT(*) as count FROM chat_sessions');
     const totalMessages = await db.query('SELECT COUNT(*) as count FROM chat_messages');
-    const activeUsers = await db.query('SELECT COUNT(*) as count FROM users WHERE last_login > NOW() - INTERVAL \'7 days\'');
+    const activeUsers = await db.query('SELECT COUNT(*) as count FROM users WHERE last_login > datetime(\'now\', \'-7 days\')');
     
     res.json({
       totalSessions: parseInt(totalSessions.rows[0].count),

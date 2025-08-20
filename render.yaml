@@ -38,12 +38,22 @@ services:
       npm install
       cd backend
       npm install
-    startCommand: cd backend && mkdir -p db && npm start
+    buildCommand: |
+      apt-get update -y
+      apt-get install -y python3 make g++ gcc pkg-config
+      mkdir -p backend/db
+      npm install
+      npm run build
+    startCommand: cd backend && mkdir -p db && npm run install && npm start
     envVars:
       - key: DATABASE_TYPE
         value: sqlite
       - key: DATABASE_PATH
-        value: db/zurdir.sqlite
+        value: /opt/render/project/src/backend/db/zurdir.sqlite
+      - key: NODE_ENV
+        value: production
+      - key: npm_config_build_from_source
+        value: true
       - key: JWT_SECRET
         generateValue: true
         length: 64

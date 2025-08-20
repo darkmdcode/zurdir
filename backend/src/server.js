@@ -125,15 +125,43 @@ app.use(express.static(path.join(__dirname, '../../.next/static')));
 app.use(express.static(path.join(__dirname, '../../public')));
 
 // ADDED: Serve Next.js pages for all non-API routes
+// Serve Next.js App Router HTML files for all non-API routes
 app.get('*', (req, res, next) => {
   if (!req.path.startsWith('/api/')) {
-    const filePath = path.join(__dirname, '../../.next/server/pages', req.path === '/' ? 'index.html' : `${req.path}.html`);
-    res.sendFile(filePath, (err) => {
-      if (err) {
-        // If file doesn't exist, serve the main index.html (for client-side routing)
-        res.sendFile(path.join(__dirname, '../../.next/server/pages/index.html'));
+    // Determine the base directory for Next.js build output
+    // Try standalone output first, then fallback to regular .next output
+    const baseAppDirStandalone = path.join(__dirname, '../../.next/standalone/.next/server/app');
+    const baseAppDir = path.join(__dirname, '../../.next/server/app');
+
+    // Normalize the request path to match built HTML files
+    let routePath = req.path;
+    if (routePath.endsWith('/')) routePath = routePath.slice(0, -1);
+    if (routePath === '') routePath = '/index';
+
+    // Try to serve the HTML file for the route
+    const htmlFile = routePath + '.html';
+    const tryFiles = [
+      path.join(baseAppDirStandalone, htmlFile),
+      path.join(baseAppDir, htmlFile),
+      path.join(baseAppDirStandalone, 'index.html'),
+      path.join(baseAppDir, 'index.html')
+    ];
+
+    // Try each file in order, serve the first that exists
+    const fs = require('fs');
+    (function tryNext(i) {
+      if (i >= tryFiles.length) {
+        // If nothing found, 404
+        return res.status(404).send('Not found');
       }
-    });
+      fs.access(tryFiles[i], fs.constants.F_OK, (err) => {
+        if (!err) {
+          return res.sendFile(tryFiles[i]);
+        } else {
+          tryNext(i + 1);
+        }
+      });
+    })(0);
   } else {
     // Let the 404 handler catch API routes that don't exist
     next();

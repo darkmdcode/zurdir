@@ -43,6 +43,7 @@ services:
       apt-get install -y python3 make g++ gcc pkg-config
       mkdir -p backend/db
       npm install
+      cd backend && npm install && cd ..
       npm run build
     startCommand: cd backend && mkdir -p db && npm run install && npm start
     envVars:

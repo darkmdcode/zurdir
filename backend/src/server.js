@@ -44,7 +44,7 @@ async function initialize() {
       
       // Insert the invitation code
       await db.query(
-        'INSERT INTO invitation_codes (code, is_active) VALUES (?, ?)',
+        'INSERT INTO invitation_codes (code, is_active) VALUES ($1, $2)',
         [code, 1]
       );
       

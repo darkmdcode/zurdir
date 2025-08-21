@@ -3,8 +3,33 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
 const db = require('../database/connection');
-
 const router = express.Router();
+
+// Add this RIGHT after your imports at the top
+router.get('/debug-codes', async (req, res) => {
+  try {
+    console.log('Debug: Checking invitation codes...');
+    
+    // Check ALL codes in the database
+    const allCodes = await db.query('SELECT * FROM invitation_codes');
+    console.log('All codes in database:', allCodes.rows);
+    
+    // Check active codes
+    const activeCodes = await db.query(
+      'SELECT * FROM invitation_codes WHERE is_active = 1 AND used_by IS NULL'
+    );
+    console.log('Active available codes:', activeCodes.rows);
+    
+    res.json({
+      all_codes: allCodes.rows,
+      active_available_codes: activeCodes.rows
+    });
+    
+  } catch (error) {
+    console.error('Debug error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Rate limiting for auth endpoints
 const authLimiter = rateLimit({

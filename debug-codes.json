@@ -1,0 +1,24 @@
+﻿
+
+StatusCode        : 200
+StatusDescription : OK
+Content           : {"all_codes":[{"id":"342bcd2fe2ff969e85e5a9f45fc2c582","code":"590a06175b1317b","created_at":"2025-08-19 
+                    03:16:34","used_by":null,"used_at":null,"is_active":1}],"active_available_codes":[{"id":"342bcd...
+RawContent        : HTTP/1.1 200 OK
+                    Transfer-Encoding: chunked
+                    Connection: keep-alive
+                    access-control-allow-credentials: true
+                    content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src '...
+Forms             : {}
+Headers           : {[Transfer-Encoding, chunked], [Connection, keep-alive], [access-control-allow-credentials, true], 
+                    [content-security-policy, default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' 
+                    https://fonts.googleapis.com; img-src 'self' data: https://*; font-src 'self' https://fonts.gstatic.com; connect-src 'self' 
+                    https://* ws://* wss://*; frame-src 'self'; object-src 'none'; base-uri 'self']...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : System.__ComObject
+RawContentLength  : 334
+
+
+

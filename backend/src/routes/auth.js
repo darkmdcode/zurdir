@@ -166,7 +166,7 @@ router.post('/login', authLimiter, async (req, res) => {
       `UPDATE users SET 
         failed_attempts = 0, 
         locked_until = NULL, 
-        last_login = NOW(), 
+        last_login = CURRENT_TIMESTAMP, 
         stay_logged_in = $1,
         session_expires = $2
       WHERE id = $3`,
